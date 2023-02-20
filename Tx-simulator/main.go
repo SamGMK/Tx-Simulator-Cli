@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-  //"os"
-  //"github.com/joho/godotenv"
+  "os"
+  "github.com/joho/godotenv"
   "time"
 )
 
@@ -31,7 +31,7 @@ import (
 func main() {
   //load enviromental variables to the os and 
   //check for any error in loading them
-	/**err := godotenv.Load()
+	err := godotenv.Load()
   if err != nil {
     fmt.Println("Error Loading enviromental variables", err)
     return
@@ -41,7 +41,7 @@ func main() {
   //them to the values below
   tenderlyUser := os.Getenv("TENDERLY_USER")
   tenderlyAccessKey := os.Getenv("TENDERLY_ACCESS_KEY")
-  tenderlyProject := os.Getenv("TENDERLY_PROJECT") **/
+  tenderlyProject := os.Getenv("TENDERLY_PROJECT") 
 
   //get user input and assign it to the request data struct
   var requestData = getUserInput()
@@ -55,7 +55,8 @@ func main() {
     fmt.Printf("Simulation took: %s\n",timeElapsed)
   }()
 
-  
+  //set up the HTTP request url for tenderly simulator
+  url := fmt.Sprintf("https://api.tenderly.co/api/v1/account/%v/project/%v/simulate",tenderlyUser,tenderlyProject)
 }
 
 

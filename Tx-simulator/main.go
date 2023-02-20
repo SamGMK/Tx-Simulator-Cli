@@ -47,6 +47,11 @@ func main() {
 func getUserInput() {
   var saveSimulation bool
   var saveSimulationIfFails bool
+  var simulationType string
+
+  var networkId string
+
+  var fromAddr string
   
   fmt.Println("Save Simulation(yes/no):\n")
   fmt.Scan(&saveSimulation)
@@ -55,6 +60,14 @@ func getUserInput() {
   fmt.Scan(&saveSimulationIfFails)
 
   fmt.Println("Simulation type(full/quick):\n")
-  fmt.Scan(&)
+  fmt.Scan(&simulationType)
+
+  fmt.Println("Network Id(eg: 1):\n")
+  fmt.Scan(&networkId)
+
+  fmt.Println("From(addr):\n")
+  fmt.Scan(&fromAddr)
+
+  
   
 }

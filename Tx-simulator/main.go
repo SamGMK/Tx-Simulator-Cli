@@ -1,18 +1,19 @@
 package main
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"os"
 	"time"
-  "bytes"
 
 	"github.com/joho/godotenv"
 )
 
 //request data that will be sent to the tenderly api endpoint
-  type RequestData struct{
+  type Data struct{
     
     //simulation configuration
     save            bool    //if true, simulation is saved to dashboard
@@ -76,6 +77,34 @@ func main() {
   //set the header
   request.Header.Set("X-Access-Key", tenderlyAccessKey)
 
+  //create a new client and send HTTP request
+  client := http.DefaultClient
+  response, err := client.Do(request)
+  if err != nil{
+    fmt.Println("Error receiving response:", err)
+  }
+
+  //defer the closing of the response body until the end of the main execution
+  defer response.Body.Close()
+
+  responseBody, err := ioutil.ReadAll(response.Body)
+  if err != nil {
+    fmt.Println("Error reading response body:", err)
+  }
+
+  responseData := Data{}
+  err = json.Unmarshal(responseBody, &responseData)
+  if err != nil{
+    fmt.Println("Error unmarshalling response body:", err)
+  }
+
+  
+
+  
+
+  
+  
+
 
 
 
@@ -84,8 +113,8 @@ func main() {
 
 
 //get user input and assign it to the request data struct
-func getUserInput() RequestData {
-  requestData := RequestData{}
+func getUserInput() Data {
+  requestData := Data{}
   
   fmt.Println("Save Simulation(true/false):")
   fmt.Scan(&requestData.save)

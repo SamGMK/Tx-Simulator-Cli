@@ -1,13 +1,17 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-  "os"
-  "github.com/joho/godotenv"
-  "time"
+	"net/http"
+	"os"
+	"time"
+  "bytes"
+
+	"github.com/joho/godotenv"
 )
 
- //request data that will be sent to the tenderly api endpoint
+//request data that will be sent to the tenderly api endpoint
   type RequestData struct{
     
     //simulation configuration
@@ -33,7 +37,7 @@ func main() {
   //check for any error in loading them
 	err := godotenv.Load()
   if err != nil {
-    fmt.Println("Error Loading enviromental variables", err)
+    fmt.Println("Error Loading enviromental variables:", err)
     return
   }
 
@@ -57,7 +61,25 @@ func main() {
 
   //set up the HTTP request url for tenderly simulator
   url := fmt.Sprintf("https://api.tenderly.co/api/v1/account/%v/project/%v/simulate",tenderlyUser,tenderlyProject)
-}
+
+  requestBody, err:= json.Marshal(requestData)
+  if err != nil {
+    fmt.Println("Error encoding request data in json",err)
+  }
+
+  //make a new request
+  request, err := http.NewRequest("POST", url, bytes.NewBuffer(requestBody))
+  if err != nil {
+    fmt.Println("Error making a new request:", err)
+  }
+
+  //set the header
+  request.Header.Set("X-Access-Key", tenderlyAccessKey)
+
+
+
+
+} //main
 
 
 

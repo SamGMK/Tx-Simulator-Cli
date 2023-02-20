@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-  "os"
-  "go get github.com/joho/godotenv"
+  //"os"
+  //"github.com/joho/godotenv"
 )
 
  //request data that will be sent to the tenderly api endpoint
@@ -29,7 +29,7 @@ import (
 func main() {
   //load enviromental variables to the os and 
   //check for any error in loading them
-	err := godotenv.Load()
+	/**err := godotenv.Load()
   if err != nil {
     fmt.Println("Error Loading enviromental variables", err)
     return
@@ -39,35 +39,75 @@ func main() {
   //them to the values below
   tenderlyUser := os.Getenv("TENDERLY_USER")
   tenderlyAccessKey := os.Getenv("TENDERLY_ACCESS_KEY")
-  tenderlyProject := os.Getenv("TENDERLY_PROJECT")
+  tenderlyProject := os.Getenv("TENDERLY_PROJECT") **/
+
+  //get user input and assign it to the request data struct
+  var requestData = getUserInput()
+  fmt.Println(requestData)
 
 }
 
 //get user input
-func getUserInput() {
+func getUserInput() RequestData {
   var saveSimulation bool
   var saveSimulationIfFails bool
   var simulationType string
-
   var networkId string
-
   var fromAddr string
-  
-  fmt.Println("Save Simulation(yes/no):\n")
+  var toAddr string
+  var inputData string
+  var gasToSend uint64
+  var gasPriceToUse uint64
+  var valueToSend uint64
+
+  fmt.Println("Save Simulation(true/false):")
   fmt.Scan(&saveSimulation)
 
-  fmt.Println("Save Simulation if it fails(yes/no):\n")
+  fmt.Println("Save Simulation if it fails(true/false):")
   fmt.Scan(&saveSimulationIfFails)
 
-  fmt.Println("Simulation type(full/quick):\n")
+  fmt.Println("Simulation type(full/quick):")
   fmt.Scan(&simulationType)
 
-  fmt.Println("Network Id(eg: 1):\n")
+  fmt.Println("Network Id(eg: 1):")
   fmt.Scan(&networkId)
 
-  fmt.Println("From(addr):\n")
+  fmt.Println("From(addr):")
   fmt.Scan(&fromAddr)
-
   
+  fmt.Println("To(addr)")
+  fmt.Scan(&toAddr)
+  
+  fmt.Println("Input Data:")
+  fmt.Scan(&inputData)
+  
+  fmt.Println("Gas:")
+  fmt.Scan(&gasToSend)
+  
+  fmt.Println("Gas Price:")
+  fmt.Scan(&gasPriceToUse)
+  
+  fmt.Println("Value:")
+  fmt.Scan(&valueToSend)
+
+  requestData := RequestData{
+    save:saveSimulation,          
+    save_if_fails:saveSimulationIfFails,  
+    simulation_type:simulationType,
+    network_id:networkId,
+    from:fromAddr,       
+    to:toAddr,        
+    input:inputData,  
+    gas:gasToSend,     
+    gas_price:gasPriceToUse,
+    value:valueToSend,    
+  }
+  
+  return requestData
   
 }
+
+
+
+    
+   

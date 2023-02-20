@@ -12,7 +12,6 @@ import (
 	"github.com/joho/godotenv"
 )
 
-//request data that will be sent to the tenderly api endpoint
   type Data struct{
     
     //simulation configuration
@@ -53,7 +52,7 @@ func main() {
   fmt.Println(requestData)
 
   //time the simulation to see how long it takes
-  //this is useful to check performance and later optimize
+  //this is useful to check performance 
   startTime := time.Now()
   defer func() { 
     timeElapsed := time.Since(startTime)
@@ -92,24 +91,26 @@ func main() {
     fmt.Println("Error reading response body:", err)
   }
 
-  responseData := Data{}
+  var responseData map[string]interface{}
   err = json.Unmarshal(responseBody, &responseData)
   if err != nil{
     fmt.Println("Error unmarshalling response body:", err)
   }
 
-  
+  transaction := responseData["transaction"].(map[string]interface{})
+  fmt.Printf("Simulated transaction info:\nhash: %s\nblock number: %v\ngas used: %v\n\n", transaction["hash"], transaction["block_number"], transaction["gas_used"])
 
-  
-
-  
-  
-
-
-
+fmt.Println("Events:")
+events := transaction["transaction_info"].(map[string]interface{})["logs"]
+eventsJSON, err := json.MarshalIndent(events, "", "  ")
+if err != nil {
+	fmt.Println("Error marshalling events data:", err)
+	return
+}
+fmt.Println(string(eventsJSON))
 
 } //main
-
+//0x137019e3c8aB7574c44B0ce0324cB03CbDede737
 
 
 //get user input and assign it to the request data struct
